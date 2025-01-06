@@ -1,23 +1,72 @@
 {
     "name": "incident-management",
-    "version": "0.0.1",
-    "description": "A Fiori application.",
-    "keywords": [
-        "ui5",
-        "openui5",
-        "sapui5"
-    ],
-    "scripts": {
-        "start": "node node_modules/@sap/html5-app-deployer/index.js",
-        "build:ui5": "npm run build:cf --prefix ../ --workspaces --if-present",
-        "copyzips": "copyfiles -f ../app/*/dist/*.zip ./resources/",
-        "package": "run-s build:ui5 copyzips"
+    "version": "1.0.0",
+    "description": "A simple CAP project.",
+    "repository": "<Add your repository here>",
+    "license": "UNLICENSED",
+    "private": true,
+    "dependencies": {
+      "@sap/cds": "^8",
+      "express": "^4",
+      "@cap-js/hana": "^1",
+      "@sap/xssec": "^4"
     },
-    "dependencies": { 
-        "@sap/html5-app-deployer": "^6.2.0" 
-      },
     "devDependencies": {
-        "copyfiles": "^2.4.1",
-        "npm-run-all": "^4.1.5"
-     }
+      "@cap-js/cds-types": "^0.7.0",
+      "@cap-js/sqlite": "^1",
+      "axios": "^1.7.9",
+      "chai": "^4.5.0",
+      "chai-as-promised": "^7.1.2",
+      "chai-subset": "^1.6.0",
+      "jest": "^29.7.0",
+      "cds-plugin-ui5": "^0.9.3"
+    },
+    "scripts": {
+      "test": "jest tests/test.js",
+      "start": "cds-serve",
+      "watch-incidents": "cds watch --open incidents/webapp/index.html?sap-ui-xx-viewCache=false",
+      "watch-manager": "cds watch --open ns.manager/index.html?sap-ui-xx-viewCache=false --livereload false"
+    },
+    "cds": {
+      "requires": {
+        "[development]": {
+          "auth": {
+            "kind": "mocked",
+            "users": {
+              "incident.support@tester.sap.com": {
+                "password": "initial",
+                "roles": [
+                  "support"
+                ]
+              },
+              "alice": {
+                "roles": [
+                  "support"
+                ]
+              },
+              "bob": {
+                "roles": [
+                  "support"
+                ]
+              }
+            }
+          }
+        },
+        "[production]": {
+          "db": "hana",
+          "auth": "xsuaa"
+        },
+        "html5-repo": true
+      },
+      "sql": {
+        "native_hana_associations": false
+      }
+    },
+    "sapux": [
+      "app/incidents"
+    ],
+    "workspaces": [
+      "app/*"
+    ]
   }
+  

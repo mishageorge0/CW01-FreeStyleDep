@@ -42,6 +42,6 @@ builder:
       - "/test/**"
       - "/localService/**"
 
-  resources:
+resources:
   configuration:
     propertiesFileSourceEncoding: UTF-8
